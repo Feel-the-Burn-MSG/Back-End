@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validatePostId, (req, res) => {
   postDb.getById(req.params.id)
     .then(post => {
       if (post) {
@@ -100,7 +100,12 @@ router.put('/:id', (req, res) => {
 // custom middleware
 
 function validatePostId(req, res, next) {
-  // do your magic!
+  const id = req.headers.id;
+  if (id && id === id) {
+    next();
+  } else {
+    res.status(401).json({ message: "invalid user id" });
+  }
 }
 
 module.exports = router;
