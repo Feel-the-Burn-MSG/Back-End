@@ -18,28 +18,26 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id',
-  validatePostId,
-  (req, res) => {
-    postDb.getById(req.params.id)
-      .then(post => {
-        if (post) {
-          res.status(200).json(post);
-        } else {
-          res
-            .status(404)
-            .json({ message: 'The post with the specified ID does not exist.' });
-        }
-      })
-      .catch(error => {
-        console.log('error on GET /posts/:id', error);
+router.get('/:id', validatePostId, (req, res) => {
+  postDb.getById(req.params.id)
+    .then(post => {
+      if (post) {
+        res.status(200).json(post);
+      } else {
         res
-          .status(500)
-          .json({
-            message: 'The post information could not be retrieved.',
-          });
-      });
-  });
+          .status(404)
+          .json({ message: 'The post with the specified ID does not exist.' });
+      }
+    })
+    .catch(error => {
+      console.log('error on GET /posts/:id', error);
+      res
+        .status(500)
+        .json({
+          message: 'The post information could not be retrieved.',
+        });
+    });
+});
 
 router.delete('/:id', validatePostId, (req, res) => {
   const id = req.params.id;
