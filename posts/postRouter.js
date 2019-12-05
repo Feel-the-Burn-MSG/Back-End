@@ -3,6 +3,30 @@ const postDb = require('./postDb');
 const router = express.Router();
 router.use(express.json());
 
+router.post('/', (req, res) => {
+  const postData = req.body;
+  console.log(postData);
+  const { text } = postData
+  if (!text) {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide REQUIRED info for the user post.' })
+  } else {
+    postDb.insert(postData)
+      .then(post => {
+        res
+          .status(201)
+          .json(post);
+      })
+      .catch(error => {
+        console.log('error on POST users/posts', error);
+        res
+          .status(500)
+          .json({ error: 'There was an error while saving the post to the database.' })
+      });
+  };
+});
+
 router.get('/', (req, res) => {
   postDb.get()
     .then(post => {
