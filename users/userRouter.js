@@ -69,11 +69,12 @@ router.post('/:id/posts',
   });
 
 router.get('/', (req, res) => {
+  const message = process.env.MSG || "Hello World"
   userDb.get()
     .then(user => {
       res
         .status(200)
-        .json(user);
+        .json({ message, user });
     })
     .catch(error => {
       console.log('error on GET /users', error);
